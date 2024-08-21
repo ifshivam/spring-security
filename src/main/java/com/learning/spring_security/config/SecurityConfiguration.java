@@ -10,8 +10,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
+
+import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -28,12 +31,19 @@ public class SecurityConfiguration {
         http.httpBasic(withDefaults());
         return http.build();
     }
+// ----- for In  memory authentication -------
+//    @Bean
+//    public UserDetailsService userDetailsService(){
+//       // UserDetails user = User.withUsername("shivam").password("{noop}shivam@").authorities("read").build();// when you don't use password encoder
+//        UserDetails user = User.withUsername("shivam").password("{bcrypt}$2a$12$gnTn0fDn/NlDhCYmGiGjXuNq1TugU0fA7zPfsy5vnJD7M14cReW3W").authorities("read").build(); // using passwordencoder
+//        UserDetails admin = User.withUsername("admin").password("{noop}12345").authorities("admin").build();
+//        return new InMemoryUserDetailsManager(user,admin);
+//    }
+
+    // ----------------------- for jdbc authentication ----------------------
     @Bean
-    public UserDetailsService userDetailsService(){
-       // UserDetails user = User.withUsername("shivam").password("{noop}shivam@").authorities("read").build();// when you don't use password encoder
-        UserDetails user = User.withUsername("shivam").password("{bcrypt}$2a$12$gnTn0fDn/NlDhCYmGiGjXuNq1TugU0fA7zPfsy5vnJD7M14cReW3W").authorities("read").build(); // using passwordencoder
-        UserDetails admin = User.withUsername("admin").password("{noop}12345").authorities("admin").build();
-        return new InMemoryUserDetailsManager(user,admin);
+    public UserDetailsService userDetailsService(DataSource dataSource){
+        return new JdbcUserDetailsManager(dataSource);
     }
     @Bean
     public PasswordEncoder passwordEncoder(){
