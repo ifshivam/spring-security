@@ -2,6 +2,7 @@ package com.learning.spring_security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -29,7 +31,7 @@ public class SecurityConfiguration {
     @Bean
     public UserDetailsService userDetailsService(){
        // UserDetails user = User.withUsername("shivam").password("{noop}shivam@").authorities("read").build();// when you don't use password encoder
-        UserDetails user = User.withUsername("shivam").password("{bcrypt}$2a$12$X0eAoo.bopi2KTbbfIfhDuP9bjv3bwKOAAdXHQtROAee.08uVOIP6").authorities("read").build(); // using passwordencoder
+        UserDetails user = User.withUsername("shivam").password("{bcrypt}$2a$12$gnTn0fDn/NlDhCYmGiGjXuNq1TugU0fA7zPfsy5vnJD7M14cReW3W").authorities("read").build(); // using passwordencoder
         UserDetails admin = User.withUsername("admin").password("{noop}12345").authorities("admin").build();
         return new InMemoryUserDetailsManager(user,admin);
     }
@@ -38,4 +40,9 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     }
+    // to check if password is compromised in any data breach or not
+//    @Bean
+//    public CompromisedPasswordChecker compromisedPasswordChecker(){
+//        return new HaveIBeenPwnedRestApiPasswordChecker();
+//    }
 }
