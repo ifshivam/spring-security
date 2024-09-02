@@ -1,5 +1,6 @@
 package com.learning.spring_security.entity;
 
+import com.learning.spring_security.repo.CustomerRepository;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
