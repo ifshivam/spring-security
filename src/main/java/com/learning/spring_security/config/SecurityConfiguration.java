@@ -23,9 +23,10 @@ public class SecurityConfiguration {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
 //        http.authorizeHttpRequests((requests)->requests.anyRequest().permitAll());
-        http.authorizeHttpRequests((requests)->requests
-                .requestMatchers("/account","contact").authenticated()
-                .requestMatchers("/welcome","/error").permitAll());
+        http.csrf(csrf->csrf.disable())
+                .authorizeHttpRequests((requests)->requests
+                .requestMatchers("/account","/contact").authenticated()
+                .requestMatchers("/welcome","/error","/register").permitAll());
         http.formLogin(withDefaults());
        // http.formLogin(flc->flc.disable());//if you want to disable the form login
         http.httpBasic(withDefaults());
